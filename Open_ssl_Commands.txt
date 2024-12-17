@@ -1,0 +1,7 @@
+openssl genpkey -algorithm RSA -out myCA/private/ca_private_key.pem -pkeyopt rsa_keygen_bits:2048
+openssl req -new -x509 -days 365 -key myCA/private/ca_private_key.pem -out myCA/certs/ca_cert.pem -config myCA/ca_config.cnf
+openssl req -new -key private_key.pem -out request.csr -config csr_config.cnf
+openssl ca -config myCA/ca_config.cnf -extensions usr_cert -days 365 -notext -md sha256 -in request.csr -out myCA/certs/issued_cert.pem
+openssl verify -CAfile myCA/certs/ca_cert.pem myCA/certs/issued_cert.pem
+openssl x509 -in myCA/certs/issued_cert.pem -text -noout
+openssl rsa -in private_key.pem -pubout -out public_key.pem
